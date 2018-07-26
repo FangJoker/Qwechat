@@ -56,9 +56,7 @@
 当然配置文件名称可以随意，但是里面的Key名称就不要更改了。
 
 # OAuth #
-**目前只写了 微信内部浏览器的授权**
 
-### 微信网页授权 ###
 微信授权主要是三个步骤<br>
 
 1. 使用appid等信息获取code
@@ -66,21 +64,24 @@
 2. 通过code换取 网页授权accessToken
 
 3. 拉取用户信息
+4. 
+### 微信网页授权 ###
+
 
 <br>**封装到了 OAuth这个类当中。**<br>
 <br> 简单的授权示例：
 
-第一步：获得jscode
+第一步：获得code
 
 	OAuth oauth = new OAuth();
-	//return 后页面会重定向到指定的url,state为携带的参数，形式以"&state="，H5指的是微信内部浏览器授权，目前固定填写H5，主要encodeUrl 是值你指定的页面经过Urlencode编码处理后的链接。
+	//return 后页面会重定向到指定的url,state为携带的参数，形式以"&state="，H5指的是微信内部浏览器授权，WEB指的是网站应用授权，主要encodeUrl 是值你指定的页面经过Urlencode编码处理后的链接。
 	return oauth.getCode(encodeUrl, "state", "H5");  
 
     
-第二步： 使用jscode换取accessToken
+第二步： 使用code换取accessToken
      
-因为jscode是放在上一步指定跳转的url里面的，所以需要通过  @RequestParam("code") 来获取参数
-
+因为code是放在上一步指定跳转的url里面的，所以需要通过  @RequestParam("code") 来获取参数
+    //用户确认授权后跳转到这里
 	oauth.setToken(code);
     //获取openid
 	String openId = oauth.getUserOpenid();
@@ -115,6 +116,24 @@
 		return new ModelAndView(new RedirectView("http://www.qiaohserver.cn/?openid=" + openId)); // 重定向到应用首页
 
 	}
+### 网站应用微信授权 ###
+  
+1.获取code
+	
+	OAuth oauth = new OAuth();
+	//return 后页面会重定向到指定的url,state为携带的参数，形式以"&state="，H5指的是微信内部浏览器授权，WEB指的是网站应用授权，主要encodeUrl 是值你指定的页面经过Urlencode编码处理后的链接。
+	return oauth.getCode(encodeUrl, "state", "WEB");  //之后页面会跳转到扫码页面，用户扫完完成后完成授权，最后跳转到你指定的页面（即 encodeUrl）
+
+2.用code换取accessToken 然后拉取用户信息（即用户扫码后要做的事情）
+ 		
+		 // 扫码后页面跳转到这里，然后获取Url参数code,通过code 换取 accessToken 且调用微信API
+			oauth.setToken(code);
+			openId = oauth.getUserOpenid();   
+			String userInfo = oauth.getUserInfo(openid);
+
+ 
+
+   
 
 # 微信支付 #
 **目前只支持 公众号支付和H5支付**
@@ -190,7 +209,7 @@
 		init i = new init();
 		JSONObject res = i.getJsConfig(request);  //request 为当前 HttpServletRequest ,返回相关配置的json
 
-## 返回示例 ##
+返回配置信息示例：
 
  	
 	{

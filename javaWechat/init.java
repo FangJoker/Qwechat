@@ -53,7 +53,7 @@ public class init {
 		 prop = new Properties();
 		 try{//设置配置信息目录
 			 //BufferedReader in = new BufferedReader(new FileReader("C:/Users/59859/Workspaces/MyEclipse 2016 CI/wechat/src/main/resources/wechat.properties"));
-			 BufferedReader in = new BufferedReader(new FileReader("/usr/apache-tomcat-8.0.51/webapps/wechat/WEB-INF/classes/wechat.properties"));
+			 BufferedReader in = new BufferedReader(new FileReader(""));
 			 prop.load(in);		
 		 }catch(IOException e){
 			 e.printStackTrace();

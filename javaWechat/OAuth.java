@@ -42,8 +42,8 @@ public class OAuth {
 			String url = "https://open.weixin.qq.com/connect/oauth2/authorize?appid="+i.getAppId()+"&redirect_uri="+encodeUrl+"&response_type=code&scope=snsapi_userinfo&state="+state+"#wechat_redirect";
 			return  new ModelAndView(new RedirectView(url));  //重定向到微信	
 		}else{
-			String url = "https://open.weixin.qq.com/connect/qrconnect?appid="+i.getAppId()+"&redirect_uri="+encodeUrl+"&response_type=code&scope=snsapi_login&state=STATE#wechat_redirect";
-			return  new ModelAndView(new RedirectView(url));  //重定向
+			String url = "https://open.weixin.qq.com/connect/qrconnect?appid="+i.getAppId()+"&redirect_uri="+encodeUrl+"&response_type=code&scope=snsapi_login&state="+state+"#wechat_redirect";
+			return  new ModelAndView(new RedirectView(url));  //重定向到扫码页面
 		}
 		 
 	}
